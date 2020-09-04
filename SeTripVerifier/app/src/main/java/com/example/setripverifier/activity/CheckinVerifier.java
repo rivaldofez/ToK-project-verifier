@@ -52,16 +52,11 @@ public class CheckinVerifier extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        toggleState.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                            @Override
-                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                                if(isChecked){
-                                    checkIn(result.getText(),"Reject");
-                                }else{
-                                    checkIn(result.getText(), "Allow");
-                                }
-                            }
-                        });
+                        if(toggleState.isChecked()){
+                            checkIn(result.getText(),"Reject");
+                        }else{
+                            checkIn(result.getText(), "Allow");
+                        }
                     }
                 });
             }
@@ -112,6 +107,7 @@ public class CheckinVerifier extends AppCompatActivity {
         String status = "Checkin";
 
         TripModel tripModel = new TripModel(inTime, outTime, lokasi, status, uid,verifikasi);
-        reference.child(uid).setValue(tripModel);
+        reference.child(uid).child(String.valueOf(System.currentTimeMillis())).setValue(tripModel);
+        Toast.makeText(CheckinVerifier.this, "Berhasil Checkin", Toast.LENGTH_SHORT).show();
     }
 }
