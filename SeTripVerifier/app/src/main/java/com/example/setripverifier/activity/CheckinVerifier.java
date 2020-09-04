@@ -7,11 +7,14 @@ import android.Manifest;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.budiyev.android.codescanner.CodeScanner;
 import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.example.setripverifier.R;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -25,6 +28,9 @@ public class CheckinVerifier extends AppCompatActivity {
     CodeScanner codeScanner;
     CodeScannerView scannerView;
     TextView resultData;
+
+    FirebaseDatabase root;
+    DatabaseReference reference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +74,23 @@ public class CheckinVerifier extends AppCompatActivity {
         Dexter.withActivity(this).withPermission(Manifest.permission.CAMERA).withListener(new PermissionListener() {
             @Override
             public void onPermissionGranted(PermissionGrantedResponse response) {
-                
+                codeScanner.startPreview();
             }
 
             @Override
             public void onPermissionDenied(PermissionDeniedResponse response) {
-
+                Toast.makeText(CheckinVerifier.this, "Camera Permission is Required.", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onPermissionRationaleShouldBeShown(PermissionRequest permission, PermissionToken token) {
-
+                token.continuePermissionRequest();
             }
-        })
+        }).check();
+    }
+
+    private void checkInVerifier(){
+        root = FirebaseDatabase.getInstance();
+        reference = root.getReference("Trip")
     }
 }
