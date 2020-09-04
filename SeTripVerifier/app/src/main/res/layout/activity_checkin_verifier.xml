@@ -6,16 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".activity.CheckinVerifier">
 
-    <TextView
-        android:id="@+id/txtHeader"
+    <ToggleButton
+        android:id="@+id/toggleState"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:text="Check In Verifier"
-        android:textSize="24sp"
+        android:textOff="Allow"
+        android:textOn="Reject"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.88" />
 
     <com.budiyev.android.codescanner.CodeScannerView
         android:id="@+id/checkinScanner"
@@ -33,16 +34,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtHeader"
-        app:maskColor="#77000000" />
+        app:maskColor="#77000000" >
 
-    <TextView
-        android:id="@+id/resultScanner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtHeader"
-        app:layout_constraintVertical_bias="0.84000003" />
+    </com.budiyev.android.codescanner.CodeScannerView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,13 +1,13 @@
 package com.example.setripverifier.model;
 
-public class Trip {
+public class TripModel {
     String inTime, outTime, lokasi, status, uid, verifikasi;
 
-    public Trip(){
+    public TripModel(){
 
     }
 
-    public Trip(String inTime, String outTime, String lokasi, String status, String uid, String verifikasi) {
+    public TripModel(String inTime, String outTime, String lokasi, String status, String uid, String verifikasi) {
         this.inTime = inTime;
         this.outTime = outTime;
         this.lokasi = lokasi;
