@@ -122,12 +122,13 @@ public class CheckinVerifier extends AppCompatActivity {
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
                 if (dataSnapshot.exists()){
                     Toast.makeText(CheckinVerifier.this, "Ada belum checkout pada lokasi sebelumnya", Toast.LENGTH_SHORT).show();
                 }else{
                     String inTime = String.valueOf(System.currentTimeMillis());
                     TripModel tripModel = new TripModel(inTime, "Not Yet", lokasi, "Checkin", uid,verifikasi);
-                    reference.child(uid).child(String.valueOf(System.currentTimeMillis())).setValue(tripModel);
+                    reference.child(uid).child(inTime).setValue(tripModel);
                     Toast.makeText(CheckinVerifier.this, "Berhasil Checkin", Toast.LENGTH_SHORT).show();
 
                     root = FirebaseDatabase.getInstance();
