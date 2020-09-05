@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.TextView;
@@ -16,8 +17,12 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.example.setripverifier.R;
 import com.example.setripverifier.model.TripModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.google.zxing.Result;
 import com.karumi.dexter.Dexter;
 import com.karumi.dexter.PermissionToken;
@@ -26,14 +31,20 @@ import com.karumi.dexter.listener.PermissionGrantedResponse;
 import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.single.PermissionListener;
 
+import java.util.ArrayList;
+
 public class CheckinVerifier extends AppCompatActivity {
 
+    private static final String TAG = "Test";
     CodeScanner codeScanner;
     CodeScannerView scannerView;
     ToggleButton toggleState;
+    String uid;
 
     FirebaseDatabase root;
     DatabaseReference reference;
+
+    private ValueEventListener valueEventListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +63,11 @@ public class CheckinVerifier extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                            uid = result.getText();
                         if(toggleState.isChecked()){
-                            checkIn(result.getText(),"Reject");
+                            checkIn("Reject","Way Kambas");
                         }else{
-                            checkIn(result.getText(), "Allow");
+                            checkIn( "Allow", "Way Kambas");
                         }
                     }
                 });
@@ -97,17 +109,40 @@ public class CheckinVerifier extends AppCompatActivity {
         }).check();
     }
 
-    private void checkIn(String uid, String verifikasi){
+    private void checkIn(final String verifikasi, final String lokasi){
         root = FirebaseDatabase.getInstance();
         reference = root.getReference("Trip");
 
-        String inTime = String.valueOf(System.currentTimeMillis());
-        String outTime = "Not yet";
-        String lokasi = "Way Kambas";
-        String status = "Checkin";
+        root = FirebaseDatabase.getInstance();
+        DatabaseReference path = root.getReference().child("Trip").child(uid);
 
-        TripModel tripModel = new TripModel(inTime, outTime, lokasi, status, uid,verifikasi);
-        reference.child(uid).child(String.valueOf(System.currentTimeMillis())).setValue(tripModel);
-        Toast.makeText(CheckinVerifier.this, "Berhasil Checkin", Toast.LENGTH_SHORT).show();
+        Query query = path.orderByChild("status").equalTo("Checkin");
+
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()){
+                    Toast.makeText(CheckinVerifier.this, "Ada belum checkout pada lokasi sebelumnya", Toast.LENGTH_SHORT).show();
+                }else{
+                    String inTime = String.valueOf(System.currentTimeMillis());
+                    TripModel tripModel = new TripModel(inTime, "Not Yet", lokasi, "Checkin", uid,verifikasi);
+                    reference.child(uid).child(String.valueOf(System.currentTimeMillis())).setValue(tripModel);
+                    Toast.makeText(CheckinVerifier.this, "Berhasil Checkin", Toast.LENGTH_SHORT).show();
+
+                    root = FirebaseDatabase.getInstance();
+                    DatabaseReference path = root.getReference().child("Trip").child(uid);
+                    Query query = path.orderByChild("status").equalTo("Checkin");
+                    query.removeEventListener(valueEventListener);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            };
+        };
+
+        query.addValueEventListener(valueEventListener);
     }
 }
