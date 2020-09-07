@@ -99,7 +99,7 @@ public class Login extends AppCompatActivity {
                             } else {
                                 showLoader(false);
                                 Toast.makeText(Login.this, R.string.welcome, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(Login.this, DashboardActivity.class));
+                                startActivity(new Intent(Login.this, CheckinVerifier.class));
                                 finish();
                             }
                         }
@@ -112,7 +112,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void forgotPassword(View view) {
-        startActivity(new Intent(this, ForgotPassword.class));
+        startActivity(new Intent(this, CheckinVerifier.class));
     }
 
     public void register(View view) {
