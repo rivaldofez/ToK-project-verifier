@@ -79,7 +79,6 @@ public class Login extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
 
-
     }
 
     private void isVerifier(final String uid){
