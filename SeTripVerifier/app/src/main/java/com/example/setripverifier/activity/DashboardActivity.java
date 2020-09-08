@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.example.setripverifier.R;
+
 public class DashboardActivity extends AppCompatActivity {
 
     @Override
