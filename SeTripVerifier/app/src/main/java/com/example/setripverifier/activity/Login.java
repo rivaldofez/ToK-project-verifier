@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.EditText;
@@ -17,22 +18,30 @@ import android.widget.Toast;
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
 import com.example.setripverifier.R;
+import com.example.setripverifier.model.TripModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 import com.spark.submitbutton.SubmitButton;
 
 public class Login extends AppCompatActivity {
+
+    private static final String TAG = "Test";
 
     private EditText etEmail;
     private EditText etPassword;
     private TextView tvNotifPassword;
     private SubmitButton login;
     private ProgressBar progressBar;
+    private ValueEventListener valueEventListener;
 
     AwesomeValidation awesomeValidation;
 
@@ -49,6 +58,8 @@ public class Login extends AppCompatActivity {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         //check if user is null
+
+
         if(firebaseUser != null){
             startActivity (new Intent(this, CheckinVerifier.class));
             finish();
@@ -70,6 +81,47 @@ public class Login extends AppCompatActivity {
 
 
     }
+
+    private void isVerifier(final String uid){
+
+        FirebaseDatabase root = FirebaseDatabase.getInstance();
+        DatabaseReference path = root.getReference().child("Verifier").child(uid);
+
+        Query query = path;
+
+        valueEventListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                if (dataSnapshot.exists()){
+                    Log.d(TAG,"On");
+                    Log.d(TAG,dataSnapshot.toString());
+                    Toast.makeText(Login.this, R.string.welcome, Toast.LENGTH_SHORT).show();
+
+                    FirebaseDatabase root = FirebaseDatabase.getInstance();
+                    DatabaseReference path = root.getReference().child("Verifier").child(uid);
+                    Query query = path;
+                    query.removeEventListener(valueEventListener);
+
+                    startActivity(new Intent(Login.this, CheckinVerifier.class));
+                    finish();
+                }else{
+                    Log.d(TAG,dataSnapshot.toString());
+                    FirebaseAuth.getInstance().signOut();
+                    Toast.makeText(Login.this, R.string.trouble1, Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            };
+        };
+
+        query.addValueEventListener(valueEventListener);
+    }
+
+
 
     public void login(View view) {
         //init firebase
@@ -97,10 +149,16 @@ public class Login extends AppCompatActivity {
                                 showLoader(false);
                                 Toast.makeText(Login.this, R.string.trouble1, Toast.LENGTH_SHORT).show();
                             } else {
+
+                                String uid = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
+                                Log.d(TAG,uid);
                                 showLoader(false);
-                                Toast.makeText(Login.this, R.string.welcome, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(Login.this, CheckinVerifier.class));
-                                finish();
+                                isVerifier(uid);
+
+//                                showLoader(false);
+//                                Toast.makeText(Login.this, R.string.welcome, Toast.LENGTH_SHORT).show();
+//                                startActivity(new Intent(Login.this, CheckinVerifier.class));
+//                                finish();
                             }
                         }
                     });
@@ -112,7 +170,7 @@ public class Login extends AppCompatActivity {
     }
 
     public void forgotPassword(View view) {
-        startActivity(new Intent(this, CheckinVerifier.class));
+        startActivity(new Intent(this, ForgotPassword.class));
     }
 
     public void register(View view) {

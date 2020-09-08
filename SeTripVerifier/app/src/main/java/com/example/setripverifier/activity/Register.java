@@ -103,7 +103,6 @@ public class Register extends AppCompatActivity {
                                 hashMap.put("uid", uid);
                                 hashMap.put("phone_nbr", phoneNbr);
                                 hashMap.put("image", "");
-                                hashMap.put("level","verifier");
 
                                 databaseReference = FirebaseDatabase.getInstance().getReference("Verifier");
                                 databaseReference.child(uid).setValue(hashMap);
