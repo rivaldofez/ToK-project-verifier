@@ -35,10 +35,11 @@ public class SplashScreen extends AppCompatActivity {
             public void run() {
                 //setelah waktu splashscreen habis, maka langsung berpindah ke Halaman Login
                 progressBar.setVisibility(View.GONE);
-                startActivity(new Intent(SplashScreen.this, CheckinVerifier.class));
+                startActivity(new Intent(SplashScreen.this, Login.class));
                 finish();
             }
         }, splashscreen_time);
+
 
     }
 }

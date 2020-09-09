@@ -60,10 +60,10 @@ public class Login extends AppCompatActivity {
         //check if user is null
 
 
-        if(firebaseUser != null){
-            startActivity (new Intent(this, CheckinVerifier.class));
-            finish();
-        }
+//        if(firebaseUser != null){
+//            startActivity (new Intent(this, DashboardActivity.class));
+//            finish();
+//        }
     }
 
     @Override
@@ -102,7 +102,7 @@ public class Login extends AppCompatActivity {
                     Query query = path;
                     query.removeEventListener(valueEventListener);
 
-                    startActivity(new Intent(Login.this, CheckinVerifier.class));
+                    startActivity(new Intent(Login.this, DashboardActivity.class));
                     finish();
                 }else{
                     Log.d(TAG,dataSnapshot.toString());

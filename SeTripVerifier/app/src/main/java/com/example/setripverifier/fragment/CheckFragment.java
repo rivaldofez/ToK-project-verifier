@@ -12,6 +12,7 @@ import android.widget.ImageView;
 
 import com.example.setripverifier.R;
 import com.example.setripverifier.activity.CheckinVerifier;
+import com.example.setripverifier.activity.CheckoutVerifier;
 
 
 public class CheckFragment extends Fragment {
@@ -36,6 +37,14 @@ public class CheckFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), CheckinVerifier.class);
+                startActivity(intent);
+            }
+        });
+
+        imgCheckout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), CheckoutVerifier.class);
                 startActivity(intent);
             }
         });
