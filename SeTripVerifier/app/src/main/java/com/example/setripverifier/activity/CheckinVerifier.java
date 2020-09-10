@@ -64,6 +64,7 @@ public class CheckinVerifier extends AppCompatActivity {
                     @Override
                     public void run() {
                             uid = result.getText();
+
                         if(toggleState.isChecked()){
                             checkIn("Reject","Way Kambas");
                         }else{
