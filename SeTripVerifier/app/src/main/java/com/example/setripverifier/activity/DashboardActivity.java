@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.example.setripverifier.R;
 import com.example.setripverifier.fragment.CheckFragment;
+import com.example.setripverifier.fragment.ProfileFragment;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -54,14 +55,14 @@ public class DashboardActivity extends AppCompatActivity {
                         ft3.commit();
                         break;
 
-//                case R.id.nav_profile:
-//                    //profile fragment
-//                    actionBar.setTitle(R.string.profil);
-//                    ProfileFragment fragment4 = new ProfileFragment();
-//                    FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
-//                    ft4.replace(R.id.content, fragment4, "");
-//                    ft4.commit();
-//                    break;
+                case R.id.nav_profile:
+                    //profile fragment
+                    actionBar.setTitle(R.string.profil);
+                    ProfileFragment fragment4 = new ProfileFragment();
+                    FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+                    ft4.replace(R.id.content, fragment4, "");
+                    ft4.commit();
+                    break;
                 }
             }
         });
