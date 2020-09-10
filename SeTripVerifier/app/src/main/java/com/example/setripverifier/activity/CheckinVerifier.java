@@ -66,9 +66,9 @@ public class CheckinVerifier extends AppCompatActivity {
                             uid = result.getText();
 
                         if(toggleState.isChecked()){
-                            checkIn("Reject","Way Kambas");
+                            checkIn("Reject","Kebun Raya ITERA");
                         }else{
-                            checkIn( "Allow", "Way Kambas");
+                            checkIn( "Allow", "Kebun Raya ITERA");
                         }
                     }
                 });
