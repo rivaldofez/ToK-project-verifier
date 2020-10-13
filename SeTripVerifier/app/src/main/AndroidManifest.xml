@@ -21,7 +21,9 @@
         <activity android:name=".activity.Register" />
         <activity android:name=".activity.Login">
         </activity>
-        <activity android:name=".activity.SplashScreen">
+        <activity
+            android:name=".activity.SplashScreen"
+            android:theme="@style/AppTheme2">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -123,9 +123,10 @@ public class CheckoutVerifier extends AppCompatActivity {
                     }
 
 //                    Log.d(TAG,"Nilai Idchild" + idChild);
-
+                    String outTime = String.valueOf(System.currentTimeMillis());
                     HashMap hashMap = new HashMap();
                     hashMap.put("status","Checkout");
+                    hashMap.put("outTime",outTime);
                     root = FirebaseDatabase.getInstance();
                     root.getReference().child("Trip").child(uid).child(idChild)
                             .updateChildren(hashMap).addOnSuccessListener(new OnSuccessListener() {
