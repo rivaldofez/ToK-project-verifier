@@ -19,7 +19,7 @@
         <activity android:name=".activity.DashboardActivity"></activity>
         <activity android:name=".activity.ForgotPassword" />
         <activity android:name=".activity.Register" />
-        <activity android:name=".activity.Login">
+        <activity android:name=".activity.Login" android:theme="@style/AppTheme2">
         </activity>
         <activity
             android:name=".activity.SplashScreen"

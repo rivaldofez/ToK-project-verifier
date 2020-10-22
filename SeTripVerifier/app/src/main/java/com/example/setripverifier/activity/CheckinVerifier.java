@@ -17,6 +17,8 @@ import com.budiyev.android.codescanner.CodeScannerView;
 import com.budiyev.android.codescanner.DecodeCallback;
 import com.example.setripverifier.R;
 import com.example.setripverifier.model.TripModel;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -40,9 +42,12 @@ public class CheckinVerifier extends AppCompatActivity {
     CodeScannerView scannerView;
     ToggleButton toggleState;
     String uid;
+    String nameLokasi ;
 
     FirebaseDatabase root;
     DatabaseReference reference;
+    FirebaseUser verifier;
+    FirebaseAuth firebaseAuth;
 
     private ValueEventListener valueEventListener;
 
@@ -51,11 +56,29 @@ public class CheckinVerifier extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_checkin_verifier);
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        verifier = firebaseAuth.getCurrentUser();
+
+        root = FirebaseDatabase.getInstance();
+        DatabaseReference path = root.getReference("Verifier");
+        Query query = path.orderByChild("email").equalTo(verifier.getEmail());
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot ds : snapshot.getChildren()) {
+                    nameLokasi = "" + ds.child("username").getValue();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+
         scannerView = findViewById(R.id.checkinScanner);
         toggleState = findViewById(R.id.toggleState);
 
         codeScanner = new CodeScanner(this, scannerView);
-
         codeScanner.setDecodeCallback(new DecodeCallback() {
             @Override
             public void onDecoded(@NonNull final Result result) {
@@ -63,12 +86,12 @@ public class CheckinVerifier extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                            uid = result.getText();
+                        uid = result.getText();
 
                         if(toggleState.isChecked()){
-                            checkIn("Reject","Kebun Raya ITERA");
+                            checkIn("Reject",nameLokasi);
                         }else{
-                            checkIn( "Allow", "Kebun Raya ITERA");
+                            checkIn( "Allow", nameLokasi);
                         }
                     }
                 });
@@ -118,8 +141,6 @@ public class CheckinVerifier extends AppCompatActivity {
         DatabaseReference path = root.getReference().child("Trip").child(uid);
 
         Query query = path.orderByChild("status").equalTo("Checkin");
-
-
         valueEventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

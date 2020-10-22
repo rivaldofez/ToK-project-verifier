@@ -21,6 +21,7 @@ import com.example.setripverifier.R;
 import com.example.setripverifier.model.TripModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +40,7 @@ public class Login extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private TextView tvNotifPassword;
-    private SubmitButton login;
+    private FloatingActionButton login;
     private ProgressBar progressBar;
     private ValueEventListener valueEventListener;
 
