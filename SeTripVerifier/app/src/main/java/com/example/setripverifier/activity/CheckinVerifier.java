@@ -43,6 +43,7 @@ public class CheckinVerifier extends AppCompatActivity {
     ToggleButton toggleState;
     String uid;
     String nameLokasi ;
+    String latitude, longitude;
 
     FirebaseDatabase root;
     DatabaseReference reference;
@@ -67,6 +68,8 @@ public class CheckinVerifier extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot ds : snapshot.getChildren()) {
                     nameLokasi = "" + ds.child("username").getValue();
+                    latitude = "" +ds.child("latitude").getValue();
+                    longitude = ""+ds.child("longitude").getValue();
                 }
             }
             @Override
@@ -146,10 +149,10 @@ public class CheckinVerifier extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 
                 if (dataSnapshot.exists()){
-                    Toast.makeText(CheckinVerifier.this, "Ada belum checkout pada lokasi sebelumnya", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CheckinVerifier.this, "Anda belum checkout pada lokasi sebelumnya", Toast.LENGTH_SHORT).show();
                 }else{
                     String inTime = String.valueOf(System.currentTimeMillis());
-                    TripModel tripModel = new TripModel(inTime, "Not Yet", lokasi, "Checkin", uid,verifikasi);
+                    TripModel tripModel = new TripModel(inTime, "Not Yet", lokasi, "Checkin", uid,verifikasi,latitude,longitude);
                     reference.child(uid).child(inTime).setValue(tripModel);
                     Toast.makeText(CheckinVerifier.this, "Berhasil Checkin", Toast.LENGTH_SHORT).show();
 
