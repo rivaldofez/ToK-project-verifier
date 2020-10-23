@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.basgeekball.awesomevalidation.AwesomeValidation;
 import com.basgeekball.awesomevalidation.ValidationStyle;
+import com.bumptech.glide.Glide;
 import com.example.setripverifier.R;
 import com.example.setripverifier.model.TripModel;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -57,14 +58,30 @@ public class Login extends AppCompatActivity {
         super.onStart();
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        database = FirebaseDatabase.getInstance().getReference();
+        databaseReference = database.child("Verifier");
 
-        //check if user is null
+        if(firebaseUser != null){
+            Query query = databaseReference.orderByChild("email").equalTo(firebaseUser.getEmail());
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot ds: snapshot.getChildren()) {
+                        //get data
+                        String level = "" + ds.child("level").getValue();
+                        if(level.equals("verifier")){
+                            startActivity (new Intent(Login.this, DashboardActivity.class));
+                            finish();
+                        }
+                    }
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-//        if(firebaseUser != null){
-//            startActivity (new Intent(this, DashboardActivity.class));
-//            finish();
-//        }
+                }
+            });
+        }
     }
 
     @Override
@@ -81,47 +98,6 @@ public class Login extends AppCompatActivity {
 
 
     }
-
-    private void isVerifier(final String uid){
-
-        FirebaseDatabase root = FirebaseDatabase.getInstance();
-        DatabaseReference path = root.getReference().child("Verifier").child(uid);
-
-        Query query = path;
-
-        valueEventListener = new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                if (dataSnapshot.exists()){
-                    Log.d(TAG,"On");
-                    Log.d(TAG,dataSnapshot.toString());
-                    Toast.makeText(Login.this, R.string.welcome, Toast.LENGTH_SHORT).show();
-
-                    FirebaseDatabase root = FirebaseDatabase.getInstance();
-                    DatabaseReference path = root.getReference().child("Verifier").child(uid);
-                    Query query = path;
-                    query.removeEventListener(valueEventListener);
-
-                    startActivity(new Intent(Login.this, DashboardActivity.class));
-                    finish();
-                }else{
-                    Log.d(TAG,dataSnapshot.toString());
-                    FirebaseAuth.getInstance().signOut();
-                    Toast.makeText(Login.this, R.string.trouble1, Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            };
-        };
-
-        query.addValueEventListener(valueEventListener);
-    }
-
-
 
     public void login(View view) {
         //init firebase
@@ -153,12 +129,6 @@ public class Login extends AppCompatActivity {
                                 String uid = FirebaseAuth.getInstance().getCurrentUser().getUid().toString();
                                 Log.d(TAG,uid);
                                 showLoader(false);
-                                isVerifier(uid);
-
-//                                showLoader(false);
-//                                Toast.makeText(Login.this, R.string.welcome, Toast.LENGTH_SHORT).show();
-//                                startActivity(new Intent(Login.this, CheckinVerifier.class));
-//                                finish();
                             }
                         }
                     });

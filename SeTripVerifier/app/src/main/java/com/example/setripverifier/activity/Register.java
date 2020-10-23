@@ -50,6 +50,7 @@ public class Register extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPhonenbr;
     private EditText etPassword;
+    private EditText etAddress;
     private TextView tvNotifPassword;
     private Button register;
 
@@ -71,6 +72,7 @@ public class Register extends AppCompatActivity {
         etEmail = findViewById(R.id.et_email_register);
         etPhonenbr = findViewById(R.id.et_phonenbr_register);
         etPassword = findViewById(R.id.et_password_register);
+        etAddress = findViewById(R.id.et_address);
         register = findViewById(R.id.btn_register);
         tvNotifPassword = findViewById(R.id.tvPasswordNotification);
         progressBar = findViewById(R.id.progressBar);
@@ -105,15 +107,18 @@ public class Register extends AppCompatActivity {
                 ".{11,}", R.string.invalid_phonenbr);
 
         String password = etPassword.getText().toString().trim();
+        String address = etAddress.getText().toString().trim();
 
 
 
-        if(awesomeValidation.validate() && password.length() >= 6) {
+
+        if(awesomeValidation.validate() && password.length() >= 6 && address.length() >=6 ) {
             showLoader(true);
 
             final String username = etName.getText().toString().trim();
             String email = etEmail.getText().toString().trim();
             final String phoneNbr = etPhonenbr.getText().toString().trim();
+            final String addresses = etAddress.getText().toString().trim();
 
 
 
@@ -136,7 +141,8 @@ public class Register extends AppCompatActivity {
                                 hashMap.put("image", "");
                                 hashMap.put("latitude",Latitude.toString());
                                 hashMap.put("longitude",Longitude.toString());
-                                hashMap.put("address", "");
+                                hashMap.put("address", addresses);
+                                hashMap.put("level", "verifier");
 
                                 databaseReference = FirebaseDatabase.getInstance().getReference("Verifier");
                                 databaseReference.child(uid).setValue(hashMap);
@@ -150,13 +156,15 @@ public class Register extends AppCompatActivity {
                             } else {
                                 showLoader(false);
                                 Toast.makeText(Register.this, R.string.trouble, Toast.LENGTH_LONG).show();
-
                             }
                         }
                     });
 
         } else if(password.length() < 6) {
             tvNotifPassword.setVisibility(View.VISIBLE);
+            if(address.length() < 6){
+                etAddress.setError("Alamat tidak valid");
+            }
             showLoader(false);
         } else if(password.length() >=6){
             tvNotifPassword.setVisibility(View.GONE);
