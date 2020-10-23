@@ -104,5 +104,9 @@
     <string name="deskripsi_checkin">Fitur ini membantu petugas dalam memantau anda selama anda berwisata, anda akan mudah terpantau, dengan demikian anda bisa aman selama wisata</string>
     <string name="deskripsi_himbauan">Pemerintah terkait biasanya akan memberikan informasi terkini dari negara tersebut terkait keamanan untuk para wisatawan yang sedang berkunjung. Beberapa negara seperti Korea Selatan, China, dan Jepang sepertinya sudah benar-benar tidak aman untuk dikunjungi wisatawan.</string>
     <string name="deskripsi_melindungi">Untuk mencegah penyebaran COVID-19: \n\n1. Cuci tangan Anda secara rutin. Gunakan sabun dan air, atau cairan pembersih tangan berbahan alkohol.\n\n2. Selalu jaga jarak aman dengan orang yang batuk atau bersin. Kenakan masker jika pembatasan fisik tidak dimungkinkan.\n\n3. Jangan sentuh mata, hidung, atau mulut Anda.\n\n4. Saat batuk atau bersin, tutup mulut dan hidung Anda dengan lengan atau tisu.\n\n5. Jangan keluar rumah jika merasa tidak enak badan.\n\n6. Jika demam, batuk, atau kesulitan bernapas, segera cari bantuan medis.</string>
+    <string name="nama_lengkap_baru">nama lengkap baru</string>
+    <string name="nomor_handphone_baru">nomor handphone baru</string>
+    <string name="silahkan_masukkan">Silahkan masukkan</string>
+    <string name="nama_anda">Nama anda</string>
 
 </resources>

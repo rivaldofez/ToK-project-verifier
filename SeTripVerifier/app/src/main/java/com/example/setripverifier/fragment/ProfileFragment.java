@@ -3,19 +3,15 @@ package com.example.setripverifier.fragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,14 +19,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+
 import com.bumptech.glide.Glide;
-import com.example.setripverifier.R;
-import com.example.setripverifier.activity.Login;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -46,11 +47,19 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+//import com.example.setripverifier.DetectorActivity;
+import com.example.setripverifier.R;
+import com.example.setripverifier.activity.Login;
+//import com.example.setripverifier.activity.MapsLocationActivity;
+import com.example.setripverifier.activity.NoteReminderActivity;
+import com.example.setripverifier.activity.SettingProfileActivity;
+
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Objects;
 
 import static android.app.Activity.RESULT_OK;
+
 
 public class ProfileFragment extends Fragment {
 
@@ -62,6 +71,11 @@ public class ProfileFragment extends Fragment {
     FirebaseUser user;
     FirebaseDatabase database;
     DatabaseReference databaseReference;
+
+    Dialog dialog;
+    Button btndismiss, btnConfNameNumber;
+    EditText etChangeName, etChengeNumber;
+    TextView tvKeteranganubahNamaNomor;
 
     //storage
     private FirebaseAuth firebaseAuth;
@@ -91,6 +105,7 @@ public class ProfileFragment extends Fragment {
     private TextView phoneNumber;
     private TextView detail;
     private TextView noteTv;
+    private TextView smartCamera;
 
     public ProfileFragment() {
         // Required empty public constructor
@@ -114,19 +129,32 @@ public class ProfileFragment extends Fragment {
         cameraPermission = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         storagePermission = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
 
+        //TextView viewTv = view.findViewById(R.id.viewTv);
         selamatTv = view.findViewById(R.id.selamatTv);
         ImageView changeProfilePicture = view.findViewById(R.id.changePictureIv);
         backgroundIv = view.findViewById(R.id.backgroundIv);
         nameTv = view.findViewById(R.id.usernameTv);
         emailTv = view.findViewById(R.id.emailTv);
         phoneNumber = view.findViewById(R.id.phonenbrTv);
+        noteTv = view.findViewById(R.id.noteTv);
+        smartCamera = view.findViewById(R.id.viewCamera);
         progressBar = view.findViewById(R.id.progressBar);
         detail = view.findViewById(R.id.selamatBekerjaTv);
         avatarIv = view.findViewById(R.id.avatarIv);
+        ImageView changeName = view.findViewById(R.id.changeName);
+        ImageView changeNumber = view.findViewById(R.id.changeNumber);
 
         checkUserStatus();
 
         loadDataUser();
+
+
+//        viewTv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                viewAllTourismLocation();
+//            }
+//        });
 
         changeProfilePicture.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,12 +163,107 @@ public class ProfileFragment extends Fragment {
             }
         });
 
+        noteTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showNoteTv();
+            }
+        });
 
         greetings();
+
+        changeName.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNamePhoneUpdateDialog("username");
+            }
+        });
+
+        changeNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showNamePhoneUpdateDialog("phone_nbr");
+            }
+        });
 
         return view;
     }
 
+    private void showNamePhoneUpdateDialog(final String key) {
+        dialog = new Dialog(Objects.requireNonNull(getActivity()));
+        dialog.setContentView(R.layout.dialog_ubah_nama_nomor);
+        btnConfNameNumber = dialog.findViewById(R.id.btn_ubah);
+        btndismiss = dialog.findViewById(R.id.btn_dismiss_ubah);
+        etChangeName = dialog.findViewById(R.id.et_ubahnama);
+        etChengeNumber = dialog.findViewById(R.id.et_ubahnomor);
+        tvKeteranganubahNamaNomor = dialog.findViewById(R.id.tv_keterangan_ubahnamanomor);
+
+        String tv = tvKeteranganubahNamaNomor.getText().toString().trim();
+
+        if(key.equals("username")){
+            etChengeNumber.setVisibility(View.GONE);
+            tvKeteranganubahNamaNomor.setText(R.string.nama_lengkap_baru);
+        }else{
+            etChangeName.setVisibility(View.GONE);
+            tvKeteranganubahNamaNomor.setText(R.string.nomor_handphone_baru);
+        }
+
+        btndismiss.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        btnConfNameNumber.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String name = etChangeName.getText().toString().trim();
+                String number = etChengeNumber.getText().toString().trim();
+
+                if(!name.isEmpty() || !number.isEmpty()) {
+                    showLoader(true);
+                    String value;
+
+                    if(name.isEmpty()){
+                        value = number;
+                    }else {
+                        value = name;
+                    }
+
+                    HashMap<String, Object> result = new HashMap<>();
+                    result.put(key, value);
+
+                    databaseReference.child(user.getUid()).updateChildren(result)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    showLoader(false);
+                                    dialog.dismiss();
+                                    Toast.makeText(getContext(), R.string.data_diperbarui, Toast.LENGTH_SHORT).show();
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    showLoader(false);
+                                    Toast.makeText(getContext(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                } else {
+                    Toast.makeText(getContext(), "Mohon masukkan " + key + " dengan benar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
+
+
+    private void showNoteTv() {
+        startActivity(new Intent(getActivity(), NoteReminderActivity.class));
+    }
 
     private void loadDataUser() {
         showLoader(true);
@@ -149,6 +272,10 @@ public class ProfileFragment extends Fragment {
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (getActivity() == null) {
+                    return;
+                }
+
                 for (DataSnapshot ds: snapshot.getChildren()) {
                     //get data
                     String name = ""+ds.child("username").getValue();
@@ -373,7 +500,6 @@ public class ProfileFragment extends Fragment {
         }
     }
 
-
     private void checkUserStatus() {
         //get current user
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -390,6 +516,27 @@ public class ProfileFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         setHasOptionsMenu(true);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.option_menu, menu);
+
+        //hide add group icon
+        menu.findItem(R.id.option_language).setVisible(false);
+        menu.findItem(R.id.option_add).setVisible(false);
+        menu.findItem(R.id.action_search).setVisible(false);
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        int id = item.getItemId();
+        if(id == R.id.option_setting) {
+            startActivity(new Intent(getActivity(), SettingProfileActivity.class));
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void showLoader(boolean b) {
