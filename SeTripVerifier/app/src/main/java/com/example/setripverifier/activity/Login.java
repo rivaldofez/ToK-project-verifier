@@ -58,7 +58,7 @@ public class Login extends AppCompatActivity {
         super.onStart();
 
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        database = FirebaseDatabase.getInstance().getReference();
+        database = FirebaseDatabase.getInstance("https://setrip-a6a6a.firebaseio.com").getReference();
         databaseReference = database.child("Verifier");
 
         if(firebaseUser != null){
