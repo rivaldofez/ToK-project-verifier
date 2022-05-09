@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:padding="16dp"
+    tools:context=".activity.NoteReminderActivity">
+
+    <EditText
+        android:id="@+id/etSubject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/judul_catatan"
+        android:drawableStart="@drawable/ic_baseline_subject_24"
+        android:drawablePadding="10dp"
+        android:padding="10dp"
+        android:background="@drawable/rounded_bg"
+        tools:ignore="MissingConstraints"
+        android:autofillHints="no"
+        android:inputType="textCapSentences" />
+
+    <EditText
+        android:id="@+id/etMessage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
+        android:layout_above="@+id/fabOpen"
+        android:gravity="top|start"
+        android:padding="8dp"
+        android:layout_below="@+id/etSubject"
+        android:background="@drawable/rounded_bg"
+        android:autofillHints="no"
+        android:layout_marginBottom="16dp"
+        android:inputType="textMultiLine|textNoSuggestions"
+        tools:ignore="LabelFor" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabOpen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/fabSave"
+        android:src="@drawable/ic_baseline_folder_open_24"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="5dp"
+        android:layout_alignParentEnd="true"
+        android:onClick="openNote"
+        app:backgroundTint="@color/colorPrimary"
+        tools:ignore="OnClick" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_baseline_save_24"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:onClick="saveNote"
+        app:backgroundTint="@color/colorPrimary"
+        tools:ignore="OnClick,RelativeOverlap" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fabNew"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/ic_baseline_add_circle_outline_24"
+        android:layout_alignParentBottom="true"
+        android:onClick="newNote"
+        app:backgroundTint="@color/colorPrimary"
+        tools:ignore="OnClick" />
+
+
+
+
+
+</RelativeLayout>

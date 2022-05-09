@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/option_language"
+        android:title="@string/bahasa"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/option_add"
+        android:title="Add Post"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_baseline_add_circle_outline_24" />
+
+    <item
+        android:id="@+id/option_setting"
+        android:title="@string/option"
+        android:icon="@drawable/ic_baseline_settings_24"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/ic_baseline_search_24"
+        app:showAsAction="always"
+        android:title="search"
+        app:actionViewClass="android.widget.SearchView"/>
+
+</menu>

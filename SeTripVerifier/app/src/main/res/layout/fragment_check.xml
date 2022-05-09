@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.CheckFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <RelativeLayout
+            android:id="@+id/containerCheckin"
+            android:layout_width="match_parent"
+            android:background="@drawable/two_side_rounded"
+            android:elevation="10dp"
+            android:layout_margin="30dp"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imgCheckin"
+                android:layout_width="100dp"
+                android:layout_margin="20dp"
+                android:layout_height="100dp"
+                android:src="@drawable/checkin" />
+
+            <TextView
+                android:id="@+id/txtCheckin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/imgCheckin"
+                android:text="Check-in"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/containerCheckout"
+            android:layout_width="match_parent"
+            android:background="@drawable/two_side_rounded"
+            android:elevation="10dp"
+            android:layout_margin="30dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/containerCheckin"
+            android:layout_marginTop="60dp">
+
+            <ImageView
+                android:id="@+id/imgCheckout"
+                android:layout_margin="20dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/checkout" />
+
+            <TextView
+                android:id="@+id/txtCheckout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/imgCheckout"
+                android:text="Check-out"
+                android:textSize="30sp" />
+
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
