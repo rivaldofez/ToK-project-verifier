@@ -28,10 +28,10 @@
                 android:id="@+id/logo_app"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:layout_marginTop="16dp"
-                android:src="@drawable/full"
                 android:layout_gravity="center"
-                android:contentDescription="@string/image" />
+                android:layout_marginTop="16dp"
+                android:contentDescription="@string/image"
+                android:src="@drawable/full" />
 
             <TextView
                 android:layout_width="match_parent"

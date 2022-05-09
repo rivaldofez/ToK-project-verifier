@@ -137,7 +137,6 @@ public class ProfileFragment extends Fragment {
         emailTv = view.findViewById(R.id.emailTv);
         phoneNumber = view.findViewById(R.id.phonenbrTv);
         noteTv = view.findViewById(R.id.noteTv);
-        smartCamera = view.findViewById(R.id.viewCamera);
         progressBar = view.findViewById(R.id.progressBar);
         detail = view.findViewById(R.id.selamatBekerjaTv);
         avatarIv = view.findViewById(R.id.avatarIv);
